@@ -32,7 +32,7 @@ export const appCustomTheme = () => {
         main: "#76D053",
       },
     },
-    components: {...components()},
+    components: { ...components(createTheme()) },
   });
 
   const appLightTheme = createTheme({
@@ -67,7 +67,7 @@ export const appCustomTheme = () => {
         main: "#76D053",
       },
     },
-    components: {...components()}
+    components: { ...components(createTheme()) },
   });
 
   return {
@@ -134,7 +134,7 @@ const typography = (theme: Theme) => ({
   },
 });
 
-const components = (): Components<Theme> => {
+const components = (theme: Theme): Components<Theme> => {
   return {
     MuiButton: {
       variants: [
@@ -146,6 +146,22 @@ const components = (): Components<Theme> => {
           },
         },
       ],
+    },
+    MuiIconButton: {
+      defaultProps: {
+        color: "success",
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        sx: {
+          backgroundColor: theme.palette.primary.dark,
+          borderRadius: 4,
+          ".MuiOutlinedInput-root ": {
+            borderRadius: 4,
+          },
+        },
+      },
     },
   };
 };

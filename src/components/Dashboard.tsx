@@ -1,7 +1,20 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Dialog,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import Lottie from "lottie-react";
-import DashboardAnimation from "../../public/lottie/dashboardAnimation.json";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import DashboardAnimation from "../../public/lottie/dashboardAnimation.json";
+import { authAxios } from "../http";
 
 export const Dashboard = () => {
   const [showLoginSignup, setShowLoginSignup] = useState(false);
@@ -34,6 +47,103 @@ export const Dashboard = () => {
       <Button onClick={() => setShowLoginSignup(true)} variant="contained">
         Get Started Now
       </Button>
+      {showLoginSignup && (
+        <LoginSignup open handleClose={() => setShowLoginSignup(false)} />
+      )}
     </Stack>
+  );
+};
+
+const LoginSignup = ({
+  handleClose,
+  open,
+}: {
+  open: boolean;
+  handleClose: () => void;
+}) => {
+  const [isLogginIn, setIsLogginIn] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      userName: "",
+    },
+  });
+
+  const signupMutation = useMutation({
+    mutationKey: ["signup"],
+    mutationFn: (values: {
+      email: string;
+      password: string;
+      userName: string;
+    }) => authAxios.post("/signup", values),
+    onSuccess: ({ data }) => {
+      localStorage.setItem("token", data.token);
+      toast("Successfully signed you up!!");
+      handleClose();
+    },
+  });
+  const loginMutation = useMutation({
+    mutationKey: ["login"],
+    mutationFn: (values: { email: string; password: string }) =>
+      authAxios.post("/login", values),
+    onSuccess: ({ data }) => {
+      localStorage.setItem("token", data.token);
+      toast("Successfully logged you in!!");
+      handleClose();
+    },
+  });
+  const handleSubmit = form.handleSubmit((values) => {
+    console.log(values);
+    if (isLogginIn) {
+      loginMutation.mutate(values);
+      return;
+    }
+    signupMutation.mutate(values);
+  });
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        direction="column"
+        gap={3}
+        p={2}
+      >
+        <IconButton sx={{ alignSelf: "end" }} onClick={handleClose}>
+          <Close />
+        </IconButton>
+        <Typography variant="h6">
+          {" "}
+          {isLogginIn ? "Loggin you in" : "Let's sign you up"}
+        </Typography>
+        <Stack
+          direction="column"
+          gap={2}
+          component="form"
+          onSubmit={handleSubmit}
+        >
+          <TextField {...form.register("email")} label="Email" />
+          <TextField {...form.register("password")} label="Password" />
+          {!isLogginIn && (
+            <TextField {...form.register("userName")} label="Username" />
+          )}
+          <Button variant="contained" type='submit'>{isLogginIn? 'Login' : 'Signup'}</Button>
+        </Stack>
+        <Typography
+          onClick={() => {
+            setIsLogginIn((p) => !p);
+            form.reset();
+          }}
+          variant="caption"
+          color="success.main"
+          sx={{ cursor: "pointer", textDecoration: "underline" }}
+        >
+          {isLogginIn
+            ? "First time? Try signing up first"
+            : "Already a Collaborizer? Pick up where you left off"}
+        </Typography>
+      </Stack>
+    </Dialog>
   );
 };
