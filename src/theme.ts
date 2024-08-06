@@ -1,4 +1,4 @@
-import { createTheme, Theme } from "@mui/material";
+import { Components, createTheme, Theme } from "@mui/material";
 export const appCustomTheme = () => {
   const appDarkTheme = createTheme({
     typography: {
@@ -32,7 +32,7 @@ export const appCustomTheme = () => {
         main: "#76D053",
       },
     },
-    components: {},
+    components: {...components()},
   });
 
   const appLightTheme = createTheme({
@@ -67,7 +67,7 @@ export const appCustomTheme = () => {
         main: "#76D053",
       },
     },
-    components: {},
+    components: {...components()}
   });
 
   return {
@@ -133,3 +133,19 @@ const typography = (theme: Theme) => ({
     fontWeight: 700,
   },
 });
+
+const components = (): Components<Theme> => {
+  return {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "contained" },
+          style: {
+            backgroundColor: "#453C92",
+            color: "#fff",
+          },
+        },
+      ],
+    },
+  };
+};

@@ -16,9 +16,9 @@ function App() {
             sx={{
               minHeight: "90dvh",
               width: "100dvw",
-              justifyContent: "center",
-              alignItems: "center",
               scrollbarWidth: "none",
+              justifyContent:'center',
+              alignItems:'center',
               "&::-webkit-scrollbar": {
                 display: "none",
               },
