@@ -78,7 +78,7 @@ const LoginSignup = ({
       userName: string;
     }) => authAxios.post("/signup", values),
     onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data.token);
       toast("Successfully signed you up!!");
       handleClose();
     },
@@ -88,7 +88,7 @@ const LoginSignup = ({
     mutationFn: (values: { email: string; password: string }) =>
       authAxios.post("/login", values),
     onSuccess: ({ data }) => {
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data.token1);
       toast("Successfully logged you in!!");
       handleClose();
     },
@@ -128,7 +128,9 @@ const LoginSignup = ({
           {!isLogginIn && (
             <TextField {...form.register("userName")} label="Username" />
           )}
-          <Button variant="contained" type='submit'>{isLogginIn? 'Login' : 'Signup'}</Button>
+          <Button variant="contained" type="submit">
+            {isLogginIn ? "Login" : "Signup"}
+          </Button>
         </Stack>
         <Typography
           onClick={() => {
