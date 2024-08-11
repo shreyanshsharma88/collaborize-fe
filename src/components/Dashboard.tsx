@@ -15,8 +15,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import DashboardAnimation from "../../public/lottie/dashboardAnimation.json";
 import { authAxios } from "../http";
+import { useNavigate } from "react-router-dom";
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const [showLoginSignup, setShowLoginSignup] = useState(false);
   return (
     <Stack
@@ -48,7 +50,12 @@ export const Dashboard = () => {
         Get Started Now
       </Button>
       {showLoginSignup && (
-        <LoginSignup open handleClose={() => setShowLoginSignup(false)} />
+        <LoginSignup
+          open
+          handleClose={() => {
+            setShowLoginSignup(false), navigate("/home");
+          }}
+        />
       )}
     </Stack>
   );

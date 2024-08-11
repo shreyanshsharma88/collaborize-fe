@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "./components";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Home } from "./components/Home";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
              <ToastContainer />
             <Routes>
               <Route path="/" element={<Dashboard/>}/>
+              <Route path="/home" element={<Home />} />
             </Routes>
           </Stack>
         </AppThemeProvider>
